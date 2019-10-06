@@ -29,6 +29,12 @@ export default {
   mounted() {
     //Dispatch the initial load of inhabitants to the store
     this.$store.dispatch("loadInhabitants");
+  },
+    methods: {
+    // function to go to the ditail view route
+    goTodetail(id) {
+      this.$router.push({ name: "detailView", params: { id: id } });
+    }
   }
 };
 </script>
