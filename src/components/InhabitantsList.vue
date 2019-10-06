@@ -1,15 +1,13 @@
 <template>
-  <div class="hello">
-
+  <div class="container">
+    <h1 class="title">Brastlewark inhabitants list</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
+  name: 'InhabitantsList'
+
 }
 </script>
 
