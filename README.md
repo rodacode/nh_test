@@ -1,4 +1,4 @@
-# nh_test
+# Nicolas Hardmeier Test
 
 ## Project setup
 ```
