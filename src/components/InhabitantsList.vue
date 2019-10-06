@@ -29,7 +29,6 @@ export default {
       search: "",
       inhabitantsToDisplay: [],
       limit: 10,
-
       bottom: false
     };
   },
