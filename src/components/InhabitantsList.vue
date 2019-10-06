@@ -1,6 +1,12 @@
 <template>
   <div class="container">
     <h1 class="title">Brastlewark inhabitants list</h1>
+    <div class="search-wrapper">
+      <input type="text" v-model="search" placeholder="Search by name.." />
+    </div>
+    <section v-if="inhabitants.length === 0">
+      <p class="title">No matches found...</p>
+    </section>
     <div v-for="(inhabitant,index) in inhabitants" v-bind:key="index+10" class="inhabitant__card">
       <div class="inhabitant__image">
         <img :src="inhabitant.thumbnail" />
@@ -19,27 +25,86 @@
 export default {
   name: "InhabitantsList",
   data() {
-    return {};
+    return {
+      search:'',
+      inhabitantsToDisplay: [],
+      limit: 10,
+      loading: false,
+      errored: false,
+      bottom: false
+    };
+  },
+  mounted() {
+      //Dispatch the initial load of inhabitants to the store
+    this.$store.dispatch("loadInhabitants");
   },
   computed: {
     inhabitants() {
-      return this.$store.getters.getInhabitants.slice(0, 10);
+        // getting the inhabitants from the filtered by the search query
+      const concat = this.$store.getters.getInhabitants.filter(inhabitant => {
+        return inhabitant.name.toLowerCase().includes(this.search.toLowerCase())}).slice(
+        // Adding the 10 first inhabitants, slicing the inhabitants array
+        // into the inhabitantsToDisplay array
+        this.inhabitantsToDisplay.length,
+        this.inhabitantsToDisplay.length + this.limit
+      );
+      return this.inhabitantsToDisplay.concat(concat);
+  
     }
   },
-  mounted() {
-    //Dispatch the initial load of inhabitants to the store
-    this.$store.dispatch("loadInhabitants");
-  },
-    methods: {
+  methods: {
+    // method to look for the document bottom and manage scroll
+    bottomVisible() {
+      const scrollY = window.scrollY;
+      const visible = document.documentElement.clientHeight;
+      const pageHeight = document.documentElement.scrollHeight;
+      const bottomOfPage = visible + scrollY >= pageHeight;
+      return bottomOfPage || pageHeight < visible;
+    },
+    // function that adds more inhabitants to the inhabitantsToDisplay array
+    loadMore() {
+      console.log("loading more!");
+      const concat = this.$store.getters.getInhabitants.slice(
+        this.inhabitantsToDisplay.length,
+        this.inhabitantsToDisplay.length + this.limit
+      );
+      this.inhabitantsToDisplay = this.inhabitantsToDisplay.concat(concat);
+        
+    },
     // function to go to the ditail view route
     goTodetail(id) {
       this.$router.push({ name: "detailView", params: { id: id } });
     }
+  },
+  // watcher for the bottom of the document, if get to the bottom
+  // calls the load more action to add more inhabitants to the
+  // inhabitantsToDisplay array
+  watch: {
+    bottom(bottom) {
+      if (bottom) {
+        this.loadMore();
+      }
+    }
+  },
+  created() {
+    window.addEventListener("scroll", () => {
+      this.bottom = this.bottomVisible();
+    });
+    this.loadMore();
   }
 };
 </script>
-
 <style scoped lang="scss">
+.search-wrapper{
+    width:150px;
+    margin:0 auto;
+    input{
+        font-size: 20px;
+        width:100%;
+        height:20px;
+
+    }
+}
 .inhabitant__card {
   width: 90%;
   border: 1px solid #555;
