@@ -7,7 +7,7 @@
     <section v-if="inhabitants.length === 0">
       <p class="title">No matches found...</p>
     </section>
-    <div v-for="(inhabitant,index) in inhabitants" v-bind:key="index+10" class="inhabitant__card">
+    <div v-for="inhabitant in inhabitants" v-bind:key="inhabitant.id" class="inhabitant__card">
       <div class="inhabitant__image">
         <img :src="inhabitant.thumbnail" />
       </div>
@@ -26,7 +26,7 @@ export default {
   name: "InhabitantsList",
   data() {
     return {
-      search:'',
+      search: "",
       inhabitantsToDisplay: [],
       limit: 10,
       loading: false,
@@ -35,21 +35,25 @@ export default {
     };
   },
   mounted() {
-      //Dispatch the initial load of inhabitants to the store
+    //Dispatch the initial load of inhabitants to the store
     this.$store.dispatch("loadInhabitants");
   },
   computed: {
     inhabitants() {
-        // getting the inhabitants from the filtered by the search query
-      const concat = this.$store.getters.getInhabitants.filter(inhabitant => {
-        return inhabitant.name.toLowerCase().includes(this.search.toLowerCase())}).slice(
-        // Adding the 10 first inhabitants, slicing the inhabitants array
-        // into the inhabitantsToDisplay array
-        this.inhabitantsToDisplay.length,
-        this.inhabitantsToDisplay.length + this.limit
-      );
+      // getting the inhabitants from the filtered by the search query
+      const concat = this.$store.getters.getInhabitants
+        .filter(inhabitant => {
+          return inhabitant.name
+            .toLowerCase()
+            .includes(this.search.toLowerCase());
+        })
+        .slice(
+          // Adding the 10 first inhabitants, slicing the inhabitants array
+          // into the inhabitantsToDisplay array
+          this.inhabitantsToDisplay.length,
+          this.inhabitantsToDisplay.length + this.limit
+        );
       return this.inhabitantsToDisplay.concat(concat);
-  
     }
   },
   methods: {
@@ -69,7 +73,6 @@ export default {
         this.inhabitantsToDisplay.length + this.limit
       );
       this.inhabitantsToDisplay = this.inhabitantsToDisplay.concat(concat);
-        
     },
     // function to go to the ditail view route
     goTodetail(id) {
@@ -95,15 +98,20 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.search-wrapper{
-    width:150px;
-    margin:0 auto;
-    input{
-        font-size: 20px;
-        width:100%;
-        height:20px;
+$color-primary:rgb(41, 21, 114);
 
-    }
+.search-wrapper {
+  width: 300px;
+  margin: 0 auto;
+  input {
+    font-size: 20px;
+    width: 100%;
+    height: 20px;
+    border: 1px solid $color-primary;
+    padding: 5px;
+    border-radius: 5px;
+    margin-left: -5px;
+  }
 }
 .inhabitant__card {
   width: 90%;

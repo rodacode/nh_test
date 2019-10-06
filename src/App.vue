@@ -5,6 +5,8 @@
 </template>
 
 <style lang="scss">
+$color-primary:rgb(41, 21, 114);
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -18,7 +20,7 @@
   padding: 20px 15px;
 }
 .button {
-  border: 1px solid rgb(41, 21, 114);
+  border: 1px solid $color-primary;
   border-radius: 5px;
   padding: 10px;
   width:200px;
@@ -30,21 +32,21 @@
     opacity: 1;
   }
   &.__primary {
-    background: rgb(41, 21, 114);
+    background: $color-primary;
     color: #fff;
 
     &:hover {
       background: #fff;
-      color: rgb(41, 21, 114);
+      color: $color-primary;
     }
   }
 
   &.__hollow {
     background: #fff;
-    color: rgb(41, 21, 114);
+    color: $color-primary;
 
     &:hover {
-      background: rgb(41, 21, 114);
+      background: $color-primary;
       color: #fff;
     }
   }
